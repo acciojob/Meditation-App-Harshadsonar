@@ -1,85 +1,51 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const app = document.getElementById("app");
-  const videoContainer = document.querySelector(".vid-container");
-  const video = document.getElementById("video");
-  const audio = document.getElementById("audio");
-  const soundButtons = document.querySelectorAll(".sound-picker button");
-  const timeButtons = document.querySelectorAll("#time-select button");
-  const timeDisplay = document.querySelector(".time-display");
-  const playButton = document.querySelector(".play");
+const cloc = document.getElementById("clock");
+const player = document.getElementById("player1");
+const backImg = document.getElementById('app')
 
-  let selectedSound = "sounds/beach.mp3";
-  let selectedVideo = "video/beach.mp4";
-  let meditationTime = 10 * 60; // Default time: 10 minutes
-  let intervalId;
+var timer;
+let min, sec, flag = 0;
 
-  // Video and audio setup
-  video.src = selectedVideo;
-  audio.src = selectedSound;
-
-  // Sound selection
-  soundButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
-      soundButtons.forEach(function(btn) {
-        btn.classList.remove("selected");
-      });
-      this.classList.add("selected");
-      selectedSound = this.id === "sound1" ? "sounds/beach.mp3" : "sounds/rain.mp3";
-      audio.src = selectedSound;
-    });
-  });
-
-  // Time selection
-  timeButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
-      timeButtons.forEach(function(btn) {
-        btn.classList.remove("selected");
-      });
-      this.classList.add("selected");
-      meditationTime = parseInt(this.id.replace("mins", "")) * 60;
-      updateTimeDisplay(meditationTime);
-    });
-  });
-
-  // Play/pause button
-  playButton.addEventListener("click", function() {
-    if (app.classList.contains("playing")) {
-      pauseMeditation();
-    } else {
-      startMeditation();
+function set(minutes, seconds){
+     min = minutes;
+     sec = seconds;
+    if (timer != null){
+        
+        clearInterval(timer);
     }
-  });
 
-  function startMeditation() {
-    app.classList.add("playing");
-    playButton.textContent = "Pause";
-    videoContainer.style.display = "block";
-    audio.play();
-    video.play();
+    timer = setInterval(()=>{
+            cloc.innerHTML = min + ":" + sec;
+            sec--;
+            if (sec < 0){
+                min--;
+                sec = 59;
+            }
 
-    intervalId = setInterval(function() {
-      meditationTime--;
-      updateTimeDisplay(meditationTime);
+            if(min < 0){
+                clearInterval(timer);
+            }
+    }, 1000)
+    
+}
 
-      if (meditationTime <= 0) {
-        pauseMeditation();
-        updateTimeDisplay(0);
-      }
-    }, 1000);
-  }
+function pause(){
+    clearInterval(timer);
+    player.src = "https://cdn-icons-png.flaticon.com/512/26/26920.png?w=740&t=st=1684664534~exp=1684665134~hmac=eaa3a69518af6e84bee2fed79fd46e7af2f9783c6d46284f119e7986361b551b";    cloc.innerHTML = cloc.innerHTML = min + ":" + sec;
+    backImg.style.background = "url('https://media.istockphoto.com/id/1300163718/photo/blurred-of-tropical-colorful-sunset-over-ocean-on-the-beach-at-thailand-tourism-background.jpg?s=612x612&w=0&k=20&c=LRDWMEp2XQ6OcNxKWPVEBF5Gnyui6Qu-a4asd9xCvoQ=')"
+}
 
-  function pauseMeditation() {
-    app.classList.remove("playing");
-    playButton.textContent = "Play";
-    videoContainer.style.display = "none";
-    audio.pause();
-    video.pause();
-    clearInterval(intervalId);
-  }
+function play(){
+    player.src = "https://static.vecteezy.com/system/resources/previews/000/630/415/original/vector-play-button-icon-design-illustration.jpg";
+    backImg.style.background = "url('https://images.pexels.com/photos/311039/pexels-photo-311039.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')"
+    set(min, sec);
+}
 
-  function updateTimeDisplay(time) {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    timeDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
-});
+function exec(){
+    if(flag){
+        pause();
+        flag = 0;
+    }else{
+        play();
+        flag = 1;
+    }
+}

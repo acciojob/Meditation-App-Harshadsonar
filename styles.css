@@ -1,22 +1,78 @@
-.vid-container {
-  width: 100%;
-  height: 400px;
-  background-color: black;
+body{
+   
+
 }
 
-.player-container {
-  display: none;
+#app{
+    background-image: url('https://images.pexels.com/photos/311039/pexels-photo-311039.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    display: block;
+    height: 400px;
+    width: 800px;
 }
 
-.sound-picker {
-  margin-top: 10px;
+#cloud>img{
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    margin-top: 100px;
+    margin-left: 700px;
+    opacity: .8;
+    backface-visibility: hidden;
+    background-color: white;
+    border-radius: 40px;
+    padding-left: 2px;
 }
 
-.time-display {
-  font-size: 24px;
-  margin-top: 10px;
+#sunrise > img{
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    margin-top: 200px;
+    margin-left: 705px;
+    backface-visibility: hidden;
+    border-radius: 40px;
 }
 
-.play {
-  margin-top: 10px;
+#clock{
+    position: absolute;
+    align-items: center;
+    margin-top: 290px;
+    margin-left: 390px;
+}
+
+.time-slots{
+    display: flexbox;
+    justify-content: space-between;
+    margin-top: 40px;
+    margin-left: 20px;
+    position: absolute;
+}
+
+.time-slots > div{
+    justify-content: space-between;
+    margin-top: 60px;
+}
+
+button{
+    height: 35px;
+    width: 150px;
+    opacity: .9;
+    background-color: transparent;
+    border: 3px solid white;
+    color: white;
+    font-weight: 600;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: medium;
+}
+
+h1{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.player>img{
+    width: 200px;
+    height:200px;
+    position: absolute;
+    margin-left: 320px;
+    margin-top: 80px;
+    border-radius: 50%
 }
