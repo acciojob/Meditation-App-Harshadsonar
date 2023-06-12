@@ -1,56 +1,88 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#app {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-}
-
 .vid-container {
-  width: 100%;
-  height: 80%;
-  position: relative;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
 }
 
-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
+/* Style for player container */
 .player-container {
-  display: none;
+	display: none;
 }
 
+/* Style for sound picker container */
 .sound-picker {
-  margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 }
 
+/* Style for active sound button */
+.active {
+	background-color: #ccc;
+}
+
+/* Style for time select container */
+#time-select {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+/* Style for time button */
+#time-select button {
+	padding: 10px;
+	margin: 0 10px;
+	border: none;
+	border-radius: 5px;
+	background-color: #ccc;
+	color: #fff;
+	cursor: pointer;
+}
+
+/* Style for active time button */
+#time-select button.active {
+	background-color: #333;
+}
+
+/* Style for time display */
 .time-display {
-  font-size: 3rem;
-  margin-top: 20px;
+	font-size: 50px;
+	text-align: center;
+	margin-top: 20px;
 }
 
-.play {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  background-image: url('play.png');
-  background-repeat: no-repeat;
-  background-position: center;
+/* Style for play/pause button */
+#play-pause {
+	width: 50px;
+	height: 50px;
+	border: none;
+	border-radius: 50%;
+	background-color: #ccc;
+	cursor: pointer;
 }
 
-.play.playing {
-  background-image: url('pause.png');
+/* Style for play icon */
+#play-pause.play::after {
+	content: "";
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+	border-left: 20px solid #fff;
+}
+
+/* Style for pause icon */
+#play-pause.pause::after {
+	content: "";
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	width: 10px;
+	height: 20px;
+	background-color: #fff;
+	border-radius: 2px;
 }
