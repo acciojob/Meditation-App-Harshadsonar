@@ -1,76 +1,35 @@
-const app = document.getElementById('app');
-const videoContainer = document.querySelector('.vid-container');
-const video = document.getElementById('video');
-const audio = document.getElementById('audio');
-const soundButtons = document.querySelectorAll('.sound-picker button');
-const timeButtons = document.querySelectorAll('.time-select button');
-const timeDisplay = document.querySelector('.time-display');
-const playButton = document.querySelector('.play');
+const meditationVideo = document.getElementById("meditation-video");
+const meditationAudio1 = document.getElementById("meditation-audio");
+const meditationAudio2 = document.getElementById("meditation-audio-2");
+const audio1Button = document.getElementById("audio-1");
+const audio2Button = document.getElementById("audio-2");
+const timeDisplay = document.querySelector(".time-display");
+const playButton = document.querySelector(".play");
+const timeSelectButtons = document.querySelectorAll("#time-select button");
 
-let currentTime = 10 * 60; // 10 minutes in seconds
-let isPlaying = false;
+let meditationTimer = null;
+let remainingTime = 10 * 60;
 
-function updateTimer() {
-  const minutes = Math.floor(currentTime / 60);
-  const seconds = currentTime % 60;
-  timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+function setTime(minutes) {
+  remainingTime = minutes * 60;
+  updateTimeDisplay();
 }
 
-function startTimer(duration) {
-  currentTime = duration * 60;
-  updateTimer();
-
-  const timer = setInterval(() => {
-    currentTime--;
-    updateTimer();
-
-    if (currentTime <= 0) {
-      clearInterval(timer);
-      pauseMeditation();
-    }
-  }, 1000);
+function updateTimeDisplay() {
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+  timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
-function pauseMeditation() {
-  isPlaying = false;
-  video.pause();
-  audio.pause();
-  playButton.textContent = 'Play';
-}
+function startTimer() {
+  if (meditationTimer) {
+    return;
+  }
 
-function playMeditation() {
-  isPlaying = true;
-  video.play();
-  audio.play();
-  playButton.textContent = 'Pause';
-}
+  playButton.classList.add("playing");
+  meditationVideo.play();
+  meditationAudio1.play();
 
-soundButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const soundFile = button.id === 'sound1' ? 'beach.mp3' : 'rain.mp3';
-    audio.src = `sounds/${soundFile}`;
-	  audio.play();
-
-// Update the active button styling
-soundButtons.forEach(btn => btn.classList.remove('active'));
-button.classList.add('active');
-});
-});
-
-timeButtons.forEach(button => {
-button.addEventListener('click', () => {
-const time = button.id === 'smaller-mins' ? 2 : button.id === 'medium-mins' ? 5 : 10;
-startTimer(time);
-// Update the active button styling
-timeButtons.forEach(btn => btn.classList.remove('active'));
-button.classList.add('active');
-});
-});
-
-playButton.addEventListener('click', () => {
-if (isPlaying) {
-pauseMeditation();
-} else {
-playMeditation();
-}
-});
+  meditationTimer = setInterval(() => {
+    remainingTime -= 1;
+    updateTimeDisplay();
