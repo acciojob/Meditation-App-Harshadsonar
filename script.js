@@ -1,69 +1,76 @@
- const app = () => {
-const song = document.querySelector('.song');
-const play = document.querySelector('.play');
-const outline = document.querySelector('.moving-outline circle');
-const video = document.querySelector('.vid-container video');
-//Sounds
-const sounds = document.querySelectorAll('.sound-picker button');
-//Time Display
+const app = document.getElementById('app');
+const videoContainer = document.querySelector('.vid-container');
+const video = document.getElementById('video');
+const audio = document.getElementById('audio');
+const soundButtons = document.querySelectorAll('.sound-picker button');
+const timeButtons = document.querySelectorAll('.time-select button');
 const timeDisplay = document.querySelector('.time-display');
-const timeSelect = document.querySelectorAll('.time-select button');
-//Get the length of the outline
-const outlineLength = outline.getTotalLength();
-console.log(outlineLength);
-//Duration
-let fakeDuration = 600;
-outline.style.strokeDasharray = outlineLength;
-outline.style.strokeDashoffset = outlineLength;
-//Pick diff sound
-sounds.forEach(sound => {
-sound.addEventListener('click', function() {
-song.src = this.getAttribute('data-sound');
-video.src = this.getAttribute('data-video');
-checkPlaying(song);
+const playButton = document.querySelector('.play');
+
+let currentTime = 10 * 60; // 10 minutes in seconds
+let isPlaying = false;
+
+function updateTimer() {
+  const minutes = Math.floor(currentTime / 60);
+  const seconds = currentTime % 60;
+  timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function startTimer(duration) {
+  currentTime = duration * 60;
+  updateTimer();
+
+  const timer = setInterval(() => {
+    currentTime--;
+    updateTimer();
+
+    if (currentTime <= 0) {
+      clearInterval(timer);
+      pauseMeditation();
+    }
+  }, 1000);
+}
+
+function pauseMeditation() {
+  isPlaying = false;
+  video.pause();
+  audio.pause();
+  playButton.textContent = 'Play';
+}
+
+function playMeditation() {
+  isPlaying = true;
+  video.play();
+  audio.play();
+  playButton.textContent = 'Pause';
+}
+
+soundButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const soundFile = button.id === 'sound1' ? 'beach.mp3' : 'rain.mp3';
+    audio.src = `sounds/${soundFile}`;
+	  audio.play();
+
+// Update the active button styling
+soundButtons.forEach(btn => btn.classList.remove('active'));
+button.classList.add('active');
 });
 });
-//play sound
-play.addEventListener('click', () => {
-checkPlaying(song);
+
+timeButtons.forEach(button => {
+button.addEventListener('click', () => {
+const time = button.id === 'smaller-mins' ? 2 : button.id === 'medium-mins' ? 5 : 10;
+startTimer(time);
+// Update the active button styling
+timeButtons.forEach(btn => btn.classList.remove('active'));
+button.classList.add('active');
 });
-//Select sound
-timeSelect.forEach(option => {
-option.addEventListener('click', function() {
-fakeDuration = this.getAttribute('data-time');
-timeDisplay.textContent = `${Math.floor(fakeDuration / 60)} : ${Math.floor(fakeDuration % 60)}`;
 });
-});
-//Create a function specific to stop and play the sounds
-const checkPlaying = song => {
-if (song.paused) {
-song.play();
-video.play();
-play.src = './svg/pause.svg';
+
+playButton.addEventListener('click', () => {
+if (isPlaying) {
+pauseMeditation();
 } else {
-song.pause();
-video.pause();
-play.src = './svg/play.svg';
+playMeditation();
 }
-};
-//We can animate the circle
-song.ontimeupdate = () => {
-let currentTime = song.currentTime;
-let elasped = fakeDuration - currentTime;
-let seconds = Math.floor(elasped % 60);
-let minutes = Math.floor(elasped / 60);
-console.log(currentTime);
-//Animate the circle
-let progress = outlineLength - (currentTime / fakeDuration) * outlineLength;
-outline.style.strokeDashoffset = progress;
-//Animate the text
-timeDisplay.textContent = `${minutes}:${seconds}`;
-if (currentTime >= fakeDuration) {
-song.pause();
-song.currentTime = 0;
-play.src = './svg/play.svg';
-video.pause();
-}
-}
-};
-app();
+});
